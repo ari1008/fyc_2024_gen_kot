@@ -17,7 +17,7 @@ gradle.startParameter.logLevel = LogLevel.INFO
 sourceSets {
     main {
         java {
-            srcDir("${layout.buildDirectory}/generated/ksp/main/kotlin")
+            srcDir("$buildDir/generated/ksp/main/kotlin")
         }
     }
 }
