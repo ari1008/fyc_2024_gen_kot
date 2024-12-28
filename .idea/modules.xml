@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/fyc_2024_gen_kot.iml" filepath="$PROJECT_DIR$/.idea/fyc_2024_gen_kot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/start.iml" filepath="$PROJECT_DIR$/.idea/modules/start.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/annotation/start.annotation.iml" filepath="$PROJECT_DIR$/.idea/modules/annotation/start.annotation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/annotation/start.annotation.main.iml" filepath="$PROJECT_DIR$/.idea/modules/annotation/start.annotation.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/annotation/start.annotation.test.iml" filepath="$PROJECT_DIR$/.idea/modules/annotation/start.annotation.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/start.main.iml" filepath="$PROJECT_DIR$/.idea/modules/start.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/processor/start.processor.iml" filepath="$PROJECT_DIR$/.idea/modules/processor/start.processor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/processor/start.processor.main.iml" filepath="$PROJECT_DIR$/.idea/modules/processor/start.processor.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/processor/start.processor.test.iml" filepath="$PROJECT_DIR$/.idea/modules/processor/start.processor.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/project/start.project.iml" filepath="$PROJECT_DIR$/.idea/modules/project/start.project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/project/start.project.main.iml" filepath="$PROJECT_DIR$/.idea/modules/project/start.project.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/project/start.project.test.iml" filepath="$PROJECT_DIR$/.idea/modules/project/start.project.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/start.test.iml" filepath="$PROJECT_DIR$/.idea/modules/start.test.iml" />
+    </modules>
+  </component>
+</project>

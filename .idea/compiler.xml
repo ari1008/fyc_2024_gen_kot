@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="annotation" target="17" />
+      <module name="annotation.main" target="17" />
+      <module name="annotation.test" target="17" />
+      <module name="start" target="17" />
+      <module name="start.annotation" target="17" />
+      <module name="start.annotation.main" target="17" />
+      <module name="start.annotation.test" target="17" />
+      <module name="start.main" target="17" />
+      <module name="start.processor" target="17" />
+      <module name="start.processor.main" target="17" />
+      <module name="start.processor.test" target="17" />
+      <module name="start.project" target="17" />
+      <module name="start.project.main" target="17" />
+      <module name="start.project.test" target="17" />
+      <module name="start.test" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

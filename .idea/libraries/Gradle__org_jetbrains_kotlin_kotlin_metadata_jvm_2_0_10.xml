@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: org.jetbrains.kotlin:kotlin-metadata-jvm:2.0.10" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="org.jetbrains.kotlin" artifactId="kotlin-metadata-jvm" version="2.0.10" baseVersion="2.0.10" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-metadata-jvm/2.0.10/39eb2cdb5f77eb817fcc18eddbae28d250ba2435/kotlin-metadata-jvm-2.0.10.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-metadata-jvm/2.0.10/715340a7d4e674e124d6a55fd13ec77f92bd08bb/kotlin-metadata-jvm-2.0.10-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

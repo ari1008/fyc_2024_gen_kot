@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.squareup:kotlinpoet-ksp:1.18.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.squareup" artifactId="kotlinpoet-ksp" version="1.18.1" baseVersion="1.18.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup/kotlinpoet-ksp/1.18.1/1c3a1beb44ac42c82ac7ee1b43e8d7611d6cbaaf/kotlinpoet-ksp-1.18.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

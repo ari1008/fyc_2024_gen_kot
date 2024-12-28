@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.tschuchortdev:kotlin-compile-testing-ksp:1.6.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.github.tschuchortdev" artifactId="kotlin-compile-testing-ksp" version="1.6.0" baseVersion="1.6.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.tschuchortdev/kotlin-compile-testing-ksp/1.6.0/e4b48b79a41e196c3674d461b9e63c6439dff7e/kotlin-compile-testing-ksp-1.6.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
