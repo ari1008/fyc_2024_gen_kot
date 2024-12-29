@@ -79,18 +79,7 @@ class DTOProcessor(
             val constructorBuilder = FunSpec.constructorBuilder()
 
             classDeclaration.getAllProperties().forEach { propertyDeclaration ->
-
-                val propertyName = propertyDeclaration.simpleName.asString()
-
-                val propertyType = resolveType(propertyDeclaration.type.resolve())
-
-                val parameterSpec = ParameterSpec.builder(propertyName, propertyType).build()
-                constructorBuilder.addParameter(parameterSpec)
-
-                val propertySpec = PropertySpec.builder(propertyName, propertyType)
-                    .initializer(propertyName)
-                    .build()
-                classBuilder.addProperty(propertySpec)
+                visitPropertyDeclaration(propertyDeclaration, constructorBuilder, classBuilder)
             }
 
             classBuilder.primaryConstructor(constructorBuilder.build())
@@ -108,6 +97,23 @@ class DTOProcessor(
             file.bufferedWriter().use { writer ->
                 fileSpec.writeTo(writer)
             }
+        }
+
+        private fun visitPropertyDeclaration(propertyDeclaration: KSPropertyDeclaration,
+            constructorBuilder: FunSpec.Builder,
+            classBuilder: TypeSpec.Builder
+        ) {
+            val propertyName = propertyDeclaration.simpleName.asString()
+            val propertyType = resolveType(propertyDeclaration.type.resolve())
+
+            val propertyBuilder = PropertySpec.builder(propertyName, propertyType)
+                .initializer(propertyName)
+
+            constructorBuilder.addParameter(
+                ParameterSpec.builder(propertyName, propertyType).build()
+            )
+
+            classBuilder.addProperty(propertyBuilder.build())
         }
 
     }
