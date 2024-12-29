@@ -103,17 +103,23 @@ class DTOProcessor(
             constructorBuilder: FunSpec.Builder,
             classBuilder: TypeSpec.Builder
         ) {
-            val propertyName = propertyDeclaration.simpleName.asString()
-            val propertyType = resolveType(propertyDeclaration.type.resolve())
+            val isAnnotated = propertyDeclaration.annotations.any { it.shortName.asString() == RemoveFromDTO::class.simpleName }
 
-            val propertyBuilder = PropertySpec.builder(propertyName, propertyType)
-                .initializer(propertyName)
+            if (!isAnnotated) {
+                val propertyName = propertyDeclaration.simpleName.asString()
+                val propertyType = resolveType(propertyDeclaration.type.resolve())
 
-            constructorBuilder.addParameter(
-                ParameterSpec.builder(propertyName, propertyType).build()
-            )
+                val propertyBuilder = PropertySpec.builder(propertyName, propertyType)
+                    .initializer(propertyName)
 
-            classBuilder.addProperty(propertyBuilder.build())
+                constructorBuilder.addParameter(
+                    ParameterSpec.builder(propertyName, propertyType).build()
+                )
+
+                classBuilder.addProperty(propertyBuilder.build())
+
+            }
+
         }
 
     }
