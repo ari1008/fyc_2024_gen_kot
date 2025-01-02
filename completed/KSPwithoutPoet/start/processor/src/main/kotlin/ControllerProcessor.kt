@@ -48,13 +48,7 @@ class ControllerProcessor(
 
     inner class ControllerVisitor(private val file: OutputStream) : KSVisitorVoid() {
         override fun visitClassDeclaration(classDeclaration: KSClassDeclaration, data: Unit) {
-            val countNumberOfEntityId = classDeclaration.getDeclaredProperties().count { it ->
-                it.annotations.any { it.shortName.asString() == "EntityId" }
-            }
-            if (countNumberOfEntityId > 1) {
-                logger.error("Only one property can be annotated with @EntityId")
-                return
-            }
+
 
             val packageName = classDeclaration.packageName.asString()
             val path = classDeclaration.annotations.find { it.shortName.asString() == "CreateBasicController"}?.arguments?.first()?.value as String
@@ -85,7 +79,7 @@ class ControllerProcessor(
             file.write("\n".toByteArray())
 
             classDeclaration.getDeclaredProperties().forEach { property ->
-                visitPropertyDeclaration(property,className, repositoryClassNameLower)
+                visitPropertyDeclaration(property,className,classNameLower , repositoryClassNameLower)
             }
             file.write("}\n".toByteArray())
 
@@ -93,7 +87,7 @@ class ControllerProcessor(
 
         }
 
-        private fun visitPropertyDeclaration(property: KSPropertyDeclaration,className: String, repositoryClassNameLower: String) {
+        private fun visitPropertyDeclaration(property: KSPropertyDeclaration,className: String,classNameLower : String, repositoryClassNameLower: String) {
             val isAnnotated = property.annotations.any {
                 it.shortName.getShortName() == "Id"
             }
@@ -106,12 +100,17 @@ class ControllerProcessor(
 
                 file.write("\n\n".toByteArray())
                 file.write("\t@PutMapping(\"/{$propName}\")\n".toByteArray())
-                file.write(("\tfun update${className}(@PathVariable $propName: $propType, @RequestBody $className: $className): $className? {\n").toByteArray())
+                file.write(("\tfun update${className}(@PathVariable $propName: $propType, @RequestBody $classNameLower: $className): $className? {\n").toByteArray())
                 file.write("\t\treturn if($repositoryClassNameLower.existsById($propName)){\n".toByteArray())
-                file.write("\t\t\t$repositoryClassNameLower.save($className.copy(id = $propName))\n".toByteArray())
+                file.write("\t\t\t$repositoryClassNameLower.save($classNameLower.copy(id = $propName))\n".toByteArray())
                 file.write("\t\t} else null\n".toByteArray())
 
                 file.write("\t}\n".toByteArray())
+
+                file.write("\n".toByteArray())
+                file.write("\t@DeleteMapping(\"/{$propName}\")\n".toByteArray())
+                file.write("\t@ResponseStatus(HttpStatus.NO_CONTENT)\n".toByteArray())
+                file.write(("\tfun delete${className}(@PathVariable $propName: $propType) = $repositoryClassNameLower.deleteById($propName)\n").toByteArray())
 
             }
         }
