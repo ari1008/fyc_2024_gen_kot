@@ -1,18 +1,26 @@
 package fr.esgi
 
 
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 
-@DTOAnnotation
-data class Restaurant(
-    @RemoveFromDTO
-    val id : Int,
-    @RemoveFromDTO
-    val ownerId : String,
-    val ownerName : String,
-    val restaurantName : String,
-    val location : String,
-    val reviews  : Int
-)
+@Entity
+@CreateBasicController(path = "api/vehicle")
+data class Vehicle(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long = 0,
+    val brand: String,
+    val model: String,
+    val vehicleYear: Int
+) {
+    constructor() : this(0, "", "", 0) {
+
+    }
+}
+
 fun main() {
     println("Hello, World!")
     println("finished")
