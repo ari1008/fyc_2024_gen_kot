@@ -71,6 +71,10 @@ class ControllerProcessor(
             .addMember("value = %T.CREATED", ClassName("org.springframework.http", "HttpStatus"))
             .build()
 
+        private val deletedResponseAnnotation = AnnotationSpec.builder(ClassName("org.springframework.web.bind.annotation", "ResponseStatus"))
+            .addMember("value = %T.NO_CONTENT", ClassName("org.springframework.http", "HttpStatus"))
+            .build()
+
         private val requestBodyAnnotation = AnnotationSpec.builder(ClassName("org.springframework.web.bind.annotation", "RequestBody"))
             .build()
         private val pathVariable = AnnotationSpec.builder(ClassName("org.springframework.web.bind.annotation", "PathVariable"))
@@ -167,6 +171,11 @@ class ControllerProcessor(
                 val getMappingAnnotationWithArgs = AnnotationSpec.builder(ClassName("org.springframework.web.bind.annotation", "GetMapping"))
                     .addMember("%S", "/{$propName}")
                     .build()
+
+                val deleteMappingAnnotationWithArgs = AnnotationSpec.builder(ClassName("org.springframework.web.bind.annotation", "DeleteMapping"))
+                    .addMember("%S", "/{$propName}")
+                    .build()
+
                 controllerClassBuilder.addFunction(
                     FunSpec.builder("get${className}By${propName.replaceFirstChar { it.uppercase() }}")
                         .addAnnotation(getMappingAnnotationWithArgs)
@@ -179,6 +188,46 @@ class ControllerProcessor(
                         .returns(ClassName("fr.esgi", className))
                         .build()
                 )
+                controllerClassBuilder.addFunction(
+                    FunSpec.builder("update${className}By${propName.replaceFirstChar { it.uppercase() }}")
+                        .addAnnotation(postMappingAnnotation)
+                        .addModifiers(KModifier.PUBLIC)
+                        .addParameter(
+                            ParameterSpec.builder(propName, resolveType(propType))
+                                .addAnnotation(pathVariable)
+                                .build()
+                        )
+                        .addParameter(
+                            ParameterSpec.builder(classNameLower, ClassName("fr.esgi", className))
+                                .addAnnotation(requestBodyAnnotation)
+                                .build()
+                        )
+                        .beginControlFlow("return if (${repositoryClassNameLower}.existsById(${propName}))")
+                        .addStatement("${repositoryClassNameLower}.save(${classNameLower}.copy(${propName} = ${propName}))")
+                        .nextControlFlow("else")
+                        .addStatement("null")
+                        .endControlFlow()
+                        .returns(ClassName("fr.esgi", className).copy(nullable = true))
+                        .build()
+
+                )
+
+
+                controllerClassBuilder.addFunction(
+                    FunSpec.builder("delete${className}By${propName.replaceFirstChar { it.uppercase() }}")
+                        .addAnnotation(deleteMappingAnnotationWithArgs)
+                        .addAnnotation(deletedResponseAnnotation)
+                        .addModifiers(KModifier.PUBLIC)
+                        .addParameter(
+                            ParameterSpec.builder(propName, resolveType(propType))
+                                .addAnnotation(pathVariable)
+                                .build())
+                        .addStatement("${repositoryClassNameLower}.deleteById(${propName})")
+                        .build()
+
+
+                )
+
 
 
             }
