@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 
 @Entity
-@CreateBasicController(path = "api/vehicle")
+@CreateBasicController(path = "api/vehicles")
 data class Vehicle(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
