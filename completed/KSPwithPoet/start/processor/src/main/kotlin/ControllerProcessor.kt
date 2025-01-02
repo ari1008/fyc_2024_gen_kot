@@ -176,6 +176,10 @@ class ControllerProcessor(
                     .addMember("%S", "/{$propName}")
                     .build()
 
+                val updateMappingAnnotationWithArgs = AnnotationSpec.builder(ClassName("org.springframework.web.bind.annotation", "PutMapping"))
+                    .addMember("%S", "/{$propName}")
+                    .build()
+
                 controllerClassBuilder.addFunction(
                     FunSpec.builder("get${className}By${propName.replaceFirstChar { it.uppercase() }}")
                         .addAnnotation(getMappingAnnotationWithArgs)
@@ -190,7 +194,7 @@ class ControllerProcessor(
                 )
                 controllerClassBuilder.addFunction(
                     FunSpec.builder("update${className}By${propName.replaceFirstChar { it.uppercase() }}")
-                        .addAnnotation(postMappingAnnotation)
+                        .addAnnotation(updateMappingAnnotationWithArgs)
                         .addModifiers(KModifier.PUBLIC)
                         .addParameter(
                             ParameterSpec.builder(propName, resolveType(propType))
