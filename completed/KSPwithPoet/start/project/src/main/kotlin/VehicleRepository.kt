@@ -1,4 +1,8 @@
 package fr.esgi
+import org.springframework.data.jpa.repository.JpaRepository
 
-class VehicleRepository {
+import org.springframework.stereotype.Repository
+
+@Repository
+interface VehicleRepository : JpaRepository<Vehicle, Long> {
 }

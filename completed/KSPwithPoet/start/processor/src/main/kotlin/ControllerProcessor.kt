@@ -6,7 +6,6 @@ import com.google.devtools.ksp.symbol.*
 import com.google.devtools.ksp.validate
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import java.io.OutputStream
 
 class ControllerProcessor(
     private val codeGenerator: CodeGenerator,
@@ -96,9 +95,9 @@ class ControllerProcessor(
             val restControllerAnnotation = AnnotationSpec.builder(ClassName("org.springframework.web.bind.annotation", "RestController"))
                 .build()
 
-            val repositoryClass = ClassName("fr.esgi", className + "Repository")
-            val repositoryClassNameLower = repositoryClass.simpleName.replaceFirstChar { it.lowercase() }
-            val repositoryParam = ParameterSpec.builder(repositoryClassNameLower, repositoryClass)
+            val serviceClass = ClassName("fr.esgi", className + "Service")
+            val serviceClassNameLower = serviceClass.simpleName.replaceFirstChar { it.lowercase() }
+            val serviceParam = ParameterSpec.builder(serviceClassNameLower, serviceClass)
                 .build()
 
             val controllerClassBuilder = TypeSpec.classBuilder("${className}Controller")
@@ -106,13 +105,13 @@ class ControllerProcessor(
                 .addAnnotation(requestMappingAnnotation)
                 .primaryConstructor(
                     FunSpec.constructorBuilder()
-                        .addParameter(repositoryParam)
+                        .addParameter(serviceParam)
                         .build()
                 )
                 .addProperty(
-                    PropertySpec.builder(repositoryClassNameLower, repositoryClass)
+                    PropertySpec.builder(serviceClassNameLower, serviceClass)
                         .addModifiers(KModifier.PRIVATE)
-                        .initializer(repositoryClassNameLower)
+                        .initializer(serviceClassNameLower)
                         .build()
                 )
                 .addFunction(
@@ -124,7 +123,7 @@ class ControllerProcessor(
                             ParameterSpec.builder(classNameLower, ClassName("fr.esgi", className))
                                 .addAnnotation(requestBodyAnnotation)
                                 .build())
-                        .addStatement("return ${repositoryClassNameLower}.save(${classNameLower})")
+                        .addStatement("return ${serviceClassNameLower}.create${className}(${classNameLower})")
                         .returns(ClassName("fr.esgi", className))
                         .build()
                 )
@@ -132,13 +131,13 @@ class ControllerProcessor(
                     FunSpec.builder("getAll${className}s")
                         .addAnnotation(getMappingAnnotation)
                         .addModifiers(KModifier.PUBLIC)
-                        .addStatement("return ${repositoryClassNameLower}.findAll()")
+                        .addStatement("return ${serviceClassNameLower}.getAll${className}s()")
                         .returns(List::class.asClassName().parameterizedBy(ClassName("fr.esgi", className)))
                         .build()
                 )
 
             classDeclaration.getDeclaredProperties().forEach { property ->
-                visitPropertyDeclaration(property,controllerClassBuilder, classNameLower, repositoryClassNameLower)
+                visitPropertyDeclaration(property,controllerClassBuilder, classNameLower, serviceClassNameLower)
             }
 
 
@@ -157,7 +156,7 @@ class ControllerProcessor(
             }
         }
 
-        private fun visitPropertyDeclaration(property: KSPropertyDeclaration, controllerClassBuilder: TypeSpec.Builder, classNameLower: String, repositoryClassNameLower: String) {
+        private fun visitPropertyDeclaration(property: KSPropertyDeclaration, controllerClassBuilder: TypeSpec.Builder, classNameLower: String, serviceClassNameLower: String) {
 
             val className = classNameLower.replaceFirstChar { it.uppercase() }
 
@@ -188,7 +187,7 @@ class ControllerProcessor(
                             ParameterSpec.builder(propName, resolveType(propType))
                                 .addAnnotation(pathVariable)
                                 .build())
-                        .addStatement("return ${repositoryClassNameLower}.findById(${propName}).orElse(null)")
+                        .addStatement("return ${serviceClassNameLower}.findById(${propName}).orElse(null)")
                         .returns(ClassName("fr.esgi", className))
                         .build()
                 )
@@ -206,8 +205,8 @@ class ControllerProcessor(
                                 .addAnnotation(requestBodyAnnotation)
                                 .build()
                         )
-                        .beginControlFlow("return if (${repositoryClassNameLower}.existsById(${propName}))")
-                        .addStatement("${repositoryClassNameLower}.save(${classNameLower}.copy(${propName} = ${propName}))")
+                        .beginControlFlow("return if (${serviceClassNameLower}.existsById(${propName}))")
+                        .addStatement("${serviceClassNameLower}.create${className}(${classNameLower}.copy(${propName} = ${propName}))")
                         .nextControlFlow("else")
                         .addStatement("null")
                         .endControlFlow()
@@ -215,8 +214,6 @@ class ControllerProcessor(
                         .build()
 
                 )
-
-
                 controllerClassBuilder.addFunction(
                     FunSpec.builder("delete${className}By${propName.replaceFirstChar { it.uppercase() }}")
                         .addAnnotation(deleteMappingAnnotationWithArgs)
@@ -226,7 +223,7 @@ class ControllerProcessor(
                             ParameterSpec.builder(propName, resolveType(propType))
                                 .addAnnotation(pathVariable)
                                 .build())
-                        .addStatement("${repositoryClassNameLower}.deleteById(${propName})")
+                        .addStatement("${serviceClassNameLower}.deleteById(${propName})")
                         .build()
 
 
