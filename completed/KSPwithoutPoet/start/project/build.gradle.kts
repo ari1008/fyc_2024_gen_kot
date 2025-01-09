@@ -32,6 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     ksp(project(":processor"))
     kspTest(project(":processor"))

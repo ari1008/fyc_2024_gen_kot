@@ -56,30 +56,31 @@ class ControllerProcessor(
             val classNameLower = className.replaceFirstChar { it.lowercase() }
 
             val controllerClassName = "${className}Controller"
-            val repositoryClassName = "${className}Repository"
-            val repositoryClassNameLower = repositoryClassName.replaceFirstChar { it.lowercase() }
+            val serviceClassName = "${className}Service"
+            val serviceClassNameLower = serviceClassName.replaceFirstChar { it.lowercase() }
 
             logger.warn("Generating Controller for class: $className")
 
             file.write("import org.springframework.http.HttpStatus\n".toByteArray())
             file.write("import org.springframework.http.ResponseEntity\n".toByteArray())
             file.write("import org.springframework.web.bind.annotation.*\n\n".toByteArray())
+            file.write("import $packageName.$serviceClassName\n".toByteArray())
             file.write("import $packageName.$className\n".toByteArray())
 
             file.write("@RestController\n".toByteArray())
             file.write("@RequestMapping(\"$path\")\n".toByteArray())
-            file.write("class $controllerClassName(private val $repositoryClassNameLower : $repositoryClassName) {\n\n".toByteArray())
+            file.write("class $controllerClassName(private val $serviceClassNameLower : $serviceClassName) {\n\n".toByteArray())
 
             file.write("\t@PostMapping\n".toByteArray())
             file.write("\t@ResponseStatus(HttpStatus.CREATED)\n".toByteArray())
-            file.write("\tfun create${className}(@RequestBody $classNameLower: $className): $className = ${repositoryClassNameLower}.save($classNameLower)\n\n".toByteArray())
+            file.write("\tfun create${className}(@RequestBody $classNameLower: $className): $className = ${serviceClassNameLower}.create${className}($classNameLower)\n\n".toByteArray())
 
             file.write("\t@GetMapping\n".toByteArray())
-            file.write("\tfun getAll${className}s(): List<$className> = ${repositoryClassNameLower}.findAll()\n".toByteArray())
+            file.write("\tfun getAll${className}s(): List<$className> = ${serviceClassNameLower}.getAll${className}s()\n".toByteArray())
             file.write("\n".toByteArray())
 
             classDeclaration.getDeclaredProperties().forEach { property ->
-                visitPropertyDeclaration(property,className,classNameLower , repositoryClassNameLower)
+                visitPropertyDeclaration(property,className,classNameLower , serviceClassNameLower)
             }
             file.write("}\n".toByteArray())
 
@@ -87,7 +88,7 @@ class ControllerProcessor(
 
         }
 
-        private fun visitPropertyDeclaration(property: KSPropertyDeclaration,className: String,classNameLower : String, repositoryClassNameLower: String) {
+        private fun visitPropertyDeclaration(property: KSPropertyDeclaration, className: String, classNameLower : String, serviceClassNameLower: String) {
             val isAnnotated = property.annotations.any {
                 it.shortName.getShortName() == "Id"
             }
@@ -96,13 +97,13 @@ class ControllerProcessor(
                 val propType = property.type.resolve().declaration.simpleName.asString()
                 file.write("\t@GetMapping(\"/{$propName}\")\n".toByteArray())
                 file.write(("\tfun get${className}ById(@PathVariable $propName: $propType): $className? =\n" +
-                        "\t\t$repositoryClassNameLower.findById($propName).orElse(null)").toByteArray())
+                        "\t\t$serviceClassNameLower.findById($propName).orElse(null)").toByteArray())
 
                 file.write("\n\n".toByteArray())
                 file.write("\t@PutMapping(\"/{$propName}\")\n".toByteArray())
                 file.write(("\tfun update${className}(@PathVariable $propName: $propType, @RequestBody $classNameLower: $className): $className? {\n").toByteArray())
-                file.write("\t\treturn if($repositoryClassNameLower.existsById($propName)){\n".toByteArray())
-                file.write("\t\t\t$repositoryClassNameLower.save($classNameLower.copy(id = $propName))\n".toByteArray())
+                file.write("\t\treturn if($serviceClassNameLower.existsById($propName)){\n".toByteArray())
+                file.write("\t\t\t$serviceClassNameLower.create${className}($classNameLower.copy(id = $propName))\n".toByteArray())
                 file.write("\t\t} else null\n".toByteArray())
 
                 file.write("\t}\n".toByteArray())
@@ -110,7 +111,7 @@ class ControllerProcessor(
                 file.write("\n".toByteArray())
                 file.write("\t@DeleteMapping(\"/{$propName}\")\n".toByteArray())
                 file.write("\t@ResponseStatus(HttpStatus.NO_CONTENT)\n".toByteArray())
-                file.write(("\tfun delete${className}(@PathVariable $propName: $propType) = $repositoryClassNameLower.deleteById($propName)\n").toByteArray())
+                file.write(("\tfun delete${className}(@PathVariable $propName: $propType) = $serviceClassNameLower.deleteById($propName)\n").toByteArray())
 
             }
         }
