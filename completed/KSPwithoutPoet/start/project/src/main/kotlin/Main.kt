@@ -1,17 +1,13 @@
 package fr.esgi
 
 
-
-@DTOAnnotation
-class Restaurant(
-    @RemoveFromDTO
-    val id : Int,
-    val ownerId : String,
-    val ownerName : String,
-    val restaurantName : String,
-    val location : String,
-    val reviews  : Int
-)
+@BasicInterfaceImpl
+interface Plane {
+    fun liftOff()
+    fun turn()
+    fun lowerOff()
+    fun openDoors()
+}
 fun main() {
     println("Hello, World!")
     println("finished")

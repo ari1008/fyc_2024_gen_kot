@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.1.0"  // Match your existing Kotlin version
-    id("com.google.devtools.ksp") version "2.1.0-1.0.29"  // Updated KSP version for Kotlin 2.0.21
+    kotlin("jvm") version "2.1.0"
+    id("com.google.devtools.ksp") version "2.1.0-1.0.29"
     id("application")
 }
 
@@ -21,14 +21,13 @@ sourceSets {
         }
     }
 }
-
 dependencies {
     implementation(kotlin("stdlib"))
     testImplementation(kotlin("test"))
     implementation(project(":annotation"))
     ksp(project(":processor"))
     kspTest(project(":processor"))
-    runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.8.0") // Match Kotlin version
+    runtimeOnly("org.jetbrains.kotlin:kotlin-reflect:1.8.0")
 }
 
 tasks.test {

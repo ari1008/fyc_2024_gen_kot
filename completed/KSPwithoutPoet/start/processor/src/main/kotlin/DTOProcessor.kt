@@ -12,14 +12,14 @@ class DTOProcessor(
 ) : SymbolProcessor {
 
     override fun process(resolver: Resolver): List<KSAnnotated> {
-        logger.warn("DTOProcessor started processing.")
+        logger.warn("DTOProcessor starting processing...")
 
         // Récupérer toutes les classes annotées avec DTOAnnotation
         val symbols = resolver.getSymbolsWithAnnotation(DTOAnnotation::class.qualifiedName.toString())
             .filterIsInstance<KSClassDeclaration>()
 
         if (!symbols.iterator().hasNext()) {
-            logger.warn("No other classes found with @DTOAnnotation.")
+            logger.warn("No other classes found with @${DTOAnnotation::class.qualifiedName.toString()}")
             return emptyList()
         }
 
